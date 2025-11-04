@@ -57,6 +57,12 @@ body {
   color: #818492;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  width: 100%;
+}
+
+body.cover-active {
+  overflow: hidden;
+  height: 100vh;
 }
 
 @media (max-width: 767px) {
@@ -3676,6 +3682,267 @@ img {
 
 .blog-single-section .comment-respond .form-submit input:hover {
   background-color: #313131;
+}
+
+/*==================================================
+ Wedding Cover Overlay
+==================================================*/
+.wedding-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wedding-cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../images/main-bg.jpg') center/cover;
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.cover-content {
+  text-align: center;
+  color: #fff;
+  max-width: 600px;
+  padding: 0 20px;
+  animation: fadeInUp 1s ease-out;
+}
+
+.cover-animation {
+  margin-bottom: 50px;
+}
+
+.cover-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 4rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1.5s ease-out;
+}
+
+.cover-couple-names {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3.5rem;
+  margin-bottom: 30px;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 2s ease-out;
+}
+
+.cover-heart {
+  font-size: 3rem;
+  margin: 30px 0;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.cover-heart i {
+  color: #ff6b6b;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.cover-date {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  animation: fadeIn 2.5s ease-out;
+}
+
+.cover-subtitle {
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.8;
+  margin-bottom: 40px;
+  animation: fadeIn 3s ease-out;
+}
+
+.cover-open-btn {
+  margin-top: 30px;
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+.open-invitation-btn {
+  background: linear-gradient(45deg, #ff6b6b, #d4a574);
+  color: #fff;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.open-invitation-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.open-invitation-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.open-invitation-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Cover closing animation */
+.wedding-cover.closing {
+  animation: coverClose 1.5s ease-in-out forwards;
+}
+
+@keyframes coverClose {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.8) rotate(5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(360deg);
+    visibility: hidden;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(255, 107, 107, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+  }
+}
+
+/* Music Control */
+.music-control {
+  margin-top: 20px;
+}
+
+.music-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.music-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.music-btn i {
+  font-size: 1.2rem;
+}
+
+.music-btn.playing {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cover-title {
+    font-size: 3rem;
+  }
+
+  .cover-couple-names {
+    font-size: 2.5rem;
+  }
+
+  .cover-heart {
+    font-size: 2.5rem;
+  }
+
+  .cover-date {
+    font-size: 1rem;
+  }
+
+  .cover-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .open-invitation-btn {
+    padding: 12px 30px;
+    font-size: 1rem;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -654,6 +654,145 @@
 
     });
 
+    /*==========================================================================
+        WEDDING COVER & MUSIC FUNCTIONALITY
+    ==========================================================================*/
 
+    // Wedding Cover functionality
+    function weddingCoverInit() {
+        var $cover = $('#wedding-cover');
+        var $openBtn = $('#openInvitation');
+        var $weddingMusic = $('#weddingMusic');
+        var $musicToggle = $('#musicToggle');
+        var $musicStatus = $('#musicStatus');
+        var isPlaying = false;
+
+        // Open invitation and start music
+        $openBtn.on('click', function(e) {
+            e.preventDefault();
+
+            // Add closing animation
+            $cover.addClass('closing');
+
+            // SET VOLUME
+            
+            $weddingMusic[0].volume = 1;
+            // Try to play music after user interaction
+            var playPromise = $weddingMusic[0].play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(function() {
+                    // Music started successfully
+                    isPlaying = true;
+                    $musicToggle.addClass('playing');
+                    $musicStatus.text('Pause Music');
+                }).catch(function(error) {
+                    // Autoplay was prevented
+                    console.log('Music autoplay prevented:', error);
+                    isPlaying = false;
+                    $musicStatus.text('Play Music');
+                });
+            }
+
+            // Remove cover after animation completes
+            setTimeout(function() {
+                $cover.hide();
+                $('body').removeClass('cover-active');
+                // Re-enable scrolling after cover is hidden
+                enableScrolling();
+            }, 1000);
+        });
+
+        // Music toggle functionality
+        $musicToggle.on('click', function(e) {
+            e.preventDefault();
+
+            if (isPlaying) {
+                $weddingMusic[0].pause();
+                $musicToggle.removeClass('playing');
+                $musicStatus.text('Play Music');
+            } else {
+                var playPromise = $weddingMusic[0].play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(function() {
+                        $musicToggle.addClass('playing');
+                        $musicStatus.text('Pause Music');
+                    }).catch(function(error) {
+                        console.log('Music play failed:', error);
+                        $musicStatus.text('Play Music');
+                    });
+                }
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Update music button when music ends
+        $weddingMusic.on('ended', function() {
+            isPlaying = false;
+            $musicToggle.removeClass('playing');
+            $musicStatus.text('Play Music');
+        });
+
+        // Add class to body when cover is active and disable scrolling
+        $('body').addClass('cover-active');
+        disableScrolling();
+    }
+
+    // Initialize wedding cover
+    weddingCoverInit();
+
+    // Disable scrolling when cover is active
+    function disableScrolling() {
+        $('html, body').css({
+            'overflow': 'hidden',
+            'height': '100vh',
+            'position': 'fixed'
+        });
+    }
+
+    // Enable scrolling when cover is closed
+    function enableScrolling() {
+        $('html, body').css({
+            'overflow': '',
+            'height': '',
+            'position': ''
+        });
+    }
+
+    // Check scroll state based on cover visibility
+    function coverScrollControl() {
+        var $cover = $('#wedding-cover');
+
+        if ($cover.length && $cover.is(':visible')) {
+            disableScrolling();
+        } else {
+            enableScrolling();
+        }
+    }
+
+    // Check cover visibility on load and resize
+    $(window).on('load', function() {
+        coverScrollControl();
+    });
+
+    $(window).on('resize', function() {
+        coverScrollControl();
+    });
+
+    // Keyboard shortcuts
+    $(document).on('keydown', function(e) {
+        // Space key to toggle music (only when cover is closed)
+        if (e.keyCode === 32 && !$('#wedding-cover').is(':visible')) {
+            e.preventDefault();
+            $('#musicToggle').click();
+        }
+
+        // Enter key to open invitation (only when cover is visible)
+        if (e.keyCode === 13 && $('#wedding-cover').is(':visible')) {
+            e.preventDefault();
+            $('#openInvitation').click();
+        }
+    });
 
 })(window.jQuery);

@@ -123,6 +123,34 @@
 
 <body id="home">
 
+    <!-- Wedding Cover Overlay -->
+    <div id="wedding-cover" class="wedding-cover">
+        <div class="cover-content">
+            <div class="cover-animation">
+                <h1 class="cover-title">The Wedding</h1>
+                <h2 class="cover-couple-names">Satrio & Umi</h2>
+                <div class="cover-heart">
+                    <i class="fi flaticon-favorite-heart-button"></i>
+                </div>
+                <p class="cover-date">22 November 2025</p>
+                <p class="cover-subtitle">You're Invited</p>
+            </div>
+            <div class="cover-open-btn">
+                <button id="openInvitation" class="theme-btn pulse-animation">
+                    <i class="fi flaticon-envelope"></i>
+                    Buka Undangan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="weddingMusic" loop>
+        <source src="assets/music/wedding-music.mp3" type="audio/mpeg">
+        <source src="assets/music/wedding-music.ogg" type="audio/ogg">
+        Browser Anda tidak mendukung audio element.
+    </audio>
+
     <!-- start page-wrapper -->
     <div class="page-wrapper">
 
@@ -173,16 +201,7 @@
                             <li><a href="#couple">Couple</a></li>
                             <li><a href="#story">Story</a></li>
                             <li><a href="#events">Events</a></li>
-                            <li><a href="#people">People</a></li>
-                            <li><a href="#gallery">Gallery</a></li>
                             <li><a href="#rsvp">RSVP</a></li>
-                            <li class="menu-item-has-children">
-                                <a href="javascript:void(0);">Blog</a>
-                                <ul class="sub-menu">
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="blog-single.html">Blog Details</a></li>
-                                </ul>
-                            </li>
                         </ul>
                     </div><!-- end of nav-collapse -->
                 </div><!-- end of container -->
@@ -479,6 +498,12 @@
                                 <h2>Satrio <br>& <br>Umi</h2>
                             </div>
                             <h3>Forever our love, Thank you</h3>
+                            <div class="music-control">
+                                <button id="musicToggle" class="music-btn">
+                                    <i class="ti-music"></i>
+                                    <span id="musicStatus">Play Music</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
