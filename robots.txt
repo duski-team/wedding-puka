@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.pdf$
+Disallow: /*.zip$
+Disallow: /*.tar.gz$
+
+Sitemap: https://satrio-umi-wedding.com/sitemap.xml
+
+# Crawl-delay: 1
