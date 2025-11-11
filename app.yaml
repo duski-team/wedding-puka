@@ -1,0 +1,21 @@
+runtime: nodejs20
+# PRODUCTION
+# service: simrs-fe
+
+# STAGING
+service:  wedding-puka
+
+# env: flex
+# runtime_config:
+#     operating_system: "ubuntu22"
+#     runtime_version: "16"
+
+handlers:
+  # Serve all static files with urls ending with a file extension
+- url: /(.*\..+)$ 
+  static_files: /\1
+  upload: /(.*\..+)$
+  # catch all handler to index.html
+- url: /.*
+  static_files: ./index.html
+  upload: ./index.html
