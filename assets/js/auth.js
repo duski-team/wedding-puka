@@ -59,6 +59,14 @@ $(document).ready(function() {
 
     // User Authentication and Personalization Functions
     const WeddingAuth = {
+        // Pagination state
+        pagination: {
+            currentPage: 1,
+            itemsPerPage: 3,
+            totalItems: 0,
+            totalPages: 0,
+            comments: []
+        },
         /**
          * Get username from URL query parameters
          * @returns {string|null} Username from URL or null if not found
@@ -262,16 +270,21 @@ $(document).ready(function() {
         },
 
         /**
-         * Fetch comment list from API
+         * Fetch comment list from API with pagination
+         * @param {number} page - Page number to fetch
          * @returns {Promise<Object|null>} API response with comment data or null on error
          */
-        async fetchCommentList() {
+        async fetchCommentList(page = 1) {
             try {
                 const response = await fetch(`${API_BASE_URL}/komentar/list`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    }
+                    },
+                    body: JSON.stringify({
+                        page: page,
+                        limit: this.pagination.itemsPerPage
+                    })
                 });
 
                 if (!response.ok) {
@@ -279,7 +292,7 @@ $(document).ready(function() {
                 }
 
                 const result = await response.json();
-                console.log('===> auth.js:282 ~ result', result);
+                console.log('===> auth.js:285 ~ result', result);
                 return result;
             } catch (error) {
                 console.error('Failed to fetch comments:', error);
@@ -329,21 +342,144 @@ $(document).ready(function() {
         },
 
         /**
-         * Render comment list to HTML
-         * @param {Array} comments - Array of comment objects from API
+         * Get comments for current page
+         * @returns {Array} Comments for current page
          */
-        renderComments(comments) {
+        getCurrentPageComments() {
+            const startIndex = (this.pagination.currentPage - 1) * this.pagination.itemsPerPage;
+            const endIndex = startIndex + this.pagination.itemsPerPage;
+            return this.pagination.comments.slice(startIndex, endIndex);
+        },
+
+        /**
+         * Update pagination state
+         * @param {Array} allComments - All comments from API
+         */
+        updatePaginationState(allComments) {
+            this.pagination.comments = Array.isArray(allComments) ? allComments : [];
+            this.pagination.totalItems = this.pagination.comments.length;
+            this.pagination.totalPages = Math.ceil(this.pagination.totalItems / this.pagination.itemsPerPage);
+            this.pagination.currentPage = Math.min(this.pagination.currentPage, Math.max(1, this.pagination.totalPages));
+        },
+
+        /**
+         * Render pagination controls
+         */
+        renderPaginationControls() {
+            const paginationContainer = document.getElementById('pagination-controls');
+            if (!paginationContainer) return;
+
+            if (this.pagination.totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '<div class="pagination-wrapper text-center">';
+
+            // Previous button
+            paginationHTML += `
+                <button onclick="WeddingAuth.goToPage(${this.pagination.currentPage - 1})"
+                        class="btn-pagination btn-prev"
+                        ${this.pagination.currentPage === 1 ? 'disabled' : ''}
+                        style="margin: 0 5px; padding: 8px 16px; border: 1px solid #d4a574; background: ${this.pagination.currentPage === 1 ? '#f8f9fa' : '#d4a574'}; color: ${this.pagination.currentPage === 1 ? '#666' : 'white'}; border-radius: 5px; cursor: ${this.pagination.currentPage === 1 ? 'not-allowed' : 'pointer'};">
+                    <i class="ti-arrow-left"></i> Sebelumnya
+                </button>
+            `;
+
+            // Page numbers
+            const startPage = Math.max(1, this.pagination.currentPage - 2);
+            const endPage = Math.min(this.pagination.totalPages, this.pagination.currentPage + 2);
+
+            if (startPage > 1) {
+                paginationHTML += `
+                    <button onclick="WeddingAuth.goToPage(1)" class="btn-pagination" style="margin: 0 5px; padding: 8px 12px; border: 1px solid #d4a574; background: white; color: #d4a574; border-radius: 5px; cursor: pointer;">
+                        1
+                    </button>
+                `;
+                if (startPage > 2) {
+                    paginationHTML += '<span style="margin: 0 5px;">...</span>';
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button onclick="WeddingAuth.goToPage(${i})"
+                            class="btn-pagination ${i === this.pagination.currentPage ? 'active' : ''}"
+                            style="margin: 0 5px; padding: 8px 12px; border: 1px solid #d4a574; background: ${i === this.pagination.currentPage ? '#d4a574' : 'white'}; color: ${i === this.pagination.currentPage ? 'white' : '#d4a574'}; border-radius: 5px; cursor: pointer;">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            if (endPage < this.pagination.totalPages) {
+                if (endPage < this.pagination.totalPages - 1) {
+                    paginationHTML += '<span style="margin: 0 5px;">...</span>';
+                }
+                paginationHTML += `
+                    <button onclick="WeddingAuth.goToPage(${this.pagination.totalPages})" class="btn-pagination" style="margin: 0 5px; padding: 8px 12px; border: 1px solid #d4a574; background: white; color: #d4a574; border-radius: 5px; cursor: pointer;">
+                        ${this.pagination.totalPages}
+                    </button>
+                `;
+            }
+
+            // Next button
+            paginationHTML += `
+                <button onclick="WeddingAuth.goToPage(${this.pagination.currentPage + 1})"
+                        class="btn-pagination btn-next"
+                        ${this.pagination.currentPage === this.pagination.totalPages ? 'disabled' : ''}
+                        style="margin: 0 5px; padding: 8px 16px; border: 1px solid #d4a574; background: ${this.pagination.currentPage === this.pagination.totalPages ? '#f8f9fa' : '#d4a574'}; color: ${this.pagination.currentPage === this.pagination.totalPages ? '#666' : 'white'}; border-radius: 5px; cursor: ${this.pagination.currentPage === this.pagination.totalPages ? 'not-allowed' : 'pointer'};">
+                    Selanjutnya <i class="ti-arrow-right"></i>
+                </button>
+            `;
+
+            paginationHTML += '</div>';
+
+            // Add pagination info
+            paginationHTML += `
+                <div class="pagination-info text-center" style="margin-top: 15px; color: #666; font-size: 14px;">
+                    Menampilkan ${((this.pagination.currentPage - 1) * this.pagination.itemsPerPage) + 1}-${Math.min(this.pagination.currentPage * this.pagination.itemsPerPage, this.pagination.totalItems)} dari ${this.pagination.totalItems} ucapan
+                </div>
+            `;
+
+            paginationContainer.innerHTML = paginationHTML;
+        },
+
+        /**
+         * Navigate to specific page
+         * @param {number} page - Page number to navigate to
+         */
+        goToPage(page) {
+            if (page < 1 || page > this.pagination.totalPages || page === this.pagination.currentPage) {
+                return;
+            }
+
+            this.pagination.currentPage = page;
+            this.renderCurrentPageComments();
+            this.renderPaginationControls();
+
+            // Scroll to top of comments section
+            const commentsSection = document.getElementById('comments-section');
+            if (commentsSection) {
+                commentsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
+
+        /**
+         * Render comments for current page
+         */
+        renderCurrentPageComments() {
+            const currentPageComments = this.getCurrentPageComments();
             const commentsContainer = document.getElementById('comments-list');
             const commentsCount = document.getElementById('comments-count');
 
             if (!commentsContainer) return;
 
-            // Update comments count
+            // Update comments count with total
             if (commentsCount) {
-                commentsCount.textContent = comments.length;
+                commentsCount.textContent = this.pagination.totalItems;
             }
 
-            if (!comments || comments.length === 0) {
+            if (currentPageComments.length === 0) {
                 commentsContainer.innerHTML = `
                     <div class="text-center py-5">
                         <i class="ti-comments" style="font-size: 48px; color: #d4a574; margin-bottom: 15px;"></i>
@@ -351,12 +487,13 @@ $(document).ready(function() {
                         <p style="color: #999; font-size: 14px;">Jadilah yang pertama memberikan ucapan!</p>
                     </div>
                 `;
+                this.renderPaginationControls();
                 return;
             }
 
-            const commentsHTML = comments.map(comment => `
+            const commentsHTML = currentPageComments.map(comment => `
                 <div class="comment-item" style="background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-left: 4px solid ${comment.kehadiran === 1 ? '#28a745' : '#dc3545'};">
-                    <div class="comment-header" style="display: flex; justify-content: between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                    <div class="comment-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
                         <div style="flex: 1;">
                             <h5 style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">
                                 ${this.getAttendanceIcon(comment.kehadiran)} ${comment.nama_komentator}
@@ -380,6 +517,16 @@ $(document).ready(function() {
             `).join('');
 
             commentsContainer.innerHTML = commentsHTML;
+            this.renderPaginationControls();
+        },
+
+        /**
+         * Render comment list to HTML
+         * @param {Array} comments - Array of comment objects from API
+         */
+        renderComments(comments) {
+            this.updatePaginationState(comments);
+            this.renderCurrentPageComments();
         },
 
         /**
