@@ -1598,6 +1598,61 @@ img {
   }
 }
 
+/* Wedding Events Cards Styles */
+.event-card-wedding:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+.see-location-btn:hover {
+  background: #c4956a !important;
+  color: #fff !important;
+  transform: translateY(-2px);
+}
+
+/* Responsive styles for wedding events */
+@media (max-width: 991px) {
+  .event-header-wedding {
+    padding: 25px !important;
+  }
+
+  .event-header-wedding h3 {
+    font-size: 22px !important;
+  }
+
+  .event-body-wedding {
+    padding: 25px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .event-card-wedding {
+    margin-bottom: 20px;
+  }
+
+  .event-header-wedding {
+    padding: 20px !important;
+  }
+
+  .event-header-wedding h3 {
+    font-size: 20px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .event-icon {
+    font-size: 28px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .event-body-wedding {
+    padding: 20px !important;
+  }
+
+  .event-date {
+    font-size: 18px !important;
+  }
+}
+
 /* Hero Mouse Icon Styles */
 .hero-mouse-icon {
   position: absolute;
