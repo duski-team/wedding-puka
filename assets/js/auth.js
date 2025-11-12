@@ -95,13 +95,32 @@ $(document).ready(function() {
                 });
 
                 if (!response.ok) {
+                    // Handle specific HTTP errors
+                    if (response.status === 404) {
+                        console.log('User not found (404) - Invalid invitation');
+                        return { invalid: true, message: 'User not found' };
+                    } else if (response.status === 401) {
+                        console.log('Unauthorized (401) - Invalid invitation');
+                        return { invalid: true, message: 'Unauthorized' };
+                    }
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const data = await response.json();
+
+                // Check if response indicates invalid invitation
+                if (data && (data.invalid === true || data.status === 'error' || data.message === 'User not found')) {
+                    console.log('API indicates invalid invitation');
+                    return { invalid: true, message: data.message || 'Invalid invitation' };
+                }
+
                 return data;
             } catch (error) {
                 console.error('Authentication failed:', error);
+                // Don't return null immediately, check if it's a network error that might indicate invalid invitation
+                if (error.message.includes('404') || error.message.includes('401')) {
+                    return { invalid: true, message: 'Invalid invitation' };
+                }
                 return null;
             }
         },
@@ -139,11 +158,101 @@ $(document).ready(function() {
          * Show error state or default greeting
          */
         showErrorState() {
-            
+
             console.error('===> auth.js:127 ~ error');
             const greetingElement = document.querySelector('.cover-greeting');
             if (greetingElement) {
                 greetingElement.innerHTML = `Kepada Yth. Bapak/Ibu/Saudara/i<br><span style="opacity: 0.7;">Tamu Undangan</span>`;
+            }
+        },
+
+        /**
+         * Show invalid invitation state
+         */
+        showInvalidInvitationState() {
+            const greetingElement = document.querySelector('.cover-greeting');
+            const openInvitationBtn = document.getElementById('openInvitation');
+            const youreInvitedText = document.querySelector('.cover-subtitle');
+
+            // Update "You're Invited" text
+            if (youreInvitedText) {
+                // youreInvitedText.textContent = 'Undangan Tidak Valid';
+                youreInvitedText.style.display = 'none';
+            }
+
+            // Update greeting message
+            if (greetingElement) {
+                greetingElement.innerHTML = `
+                    <span style="color: #ff6b6b; font-weight: 600;">
+                        ⚠️ Undangan Tidak Valid
+                    </span><br>
+                    <span style="opacity: 0.7; font-size: 14px;">
+                        Maaf, undangan ini tidak dapat digunakan
+                    </span>
+                `;
+            }
+
+            // Hide or disable the open invitation button
+            if (openInvitationBtn) {
+                openInvitationBtn.style.display = 'none';
+                // Alternatively, disable the button instead of hiding it:
+                // openInvitationBtn.disabled = true;
+                // openInvitationBtn.style.opacity = '0.5';
+                // openInvitationBtn.style.cursor = 'not-allowed';
+                // openInvitationBtn.innerHTML = '<i class="fi flaticon-envelope"></i> Undangan Tidak Valid';
+            }
+
+            // Optional: Add a message below the button area
+            const coverContent = document.querySelector('.cover-content');
+            if (coverContent) {
+                const invalidMessage = document.createElement('div');
+                invalidMessage.className = 'invalid-invitation-message';
+                invalidMessage.style.cssText = `
+                    text-align: center;
+                    margin-top: 20px;
+                    padding: 15px;
+                    background: rgba(255, 107, 107, 0.1);
+                    border-radius: 10px;
+                    border: 2px solid #ff6b6b;
+                    color: #ff6b6b;
+                    font-size: 14px;
+                    line-height: 1.4;
+                `;
+                invalidMessage.innerHTML = `
+                    <i class="ti-alert" style="font-size: 20px; margin-right: 8px;"></i>
+                    Silakan hubungi pengantin untuk undangan yang valid
+                `;
+
+                // Remove existing message if any
+                const existingMessage = coverContent.querySelector('.invalid-invitation-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                coverContent.appendChild(invalidMessage);
+            }
+        },
+
+        /**
+         * Show valid invitation state (reset to normal)
+         */
+        showValidInvitationState() {
+            const openInvitationBtn = document.getElementById('openInvitation');
+            const coverContent = document.querySelector('.cover-content');
+
+            // Restore the open invitation button
+            if (openInvitationBtn) {
+                openInvitationBtn.style.display = 'block';
+                openInvitationBtn.disabled = false;
+                openInvitationBtn.style.opacity = '1';
+                openInvitationBtn.style.cursor = 'pointer';
+                openInvitationBtn.innerHTML = '<i class="fi flaticon-envelope"></i> Buka Undangan';
+            }
+
+            // Remove invalid message if exists
+            const invalidMessage = coverContent.querySelector('.invalid-invitation-message');
+            if (invalidMessage) {
+                invalidMessage.remove();
             }
         },
 
@@ -676,22 +785,38 @@ $(document).ready(function() {
                     const authResult = await this.authenticateUser(username);
                     console.log('===> auth.js:143 ~ authResult', authResult);
 
-                    const data = authResult.data?.length ? authResult.data[0] : null;
+                    // Check if authentication result indicates invalid invitation
+                    if (authResult && authResult.invalid === true) {
+                        console.log('Invalid invitation detected:', authResult.message);
+                        this.showInvalidInvitationState();
+                        return;
+                    }
 
-                    if (data) {
-                        console.log('===> auth.js:151 ~ data.full_name', data.nama_user);
+                    // Check for valid user data
+                    const data = authResult?.data?.length ? authResult.data[0] : null;
+
+                    if (data && data.nama_user) {
+                        console.log('===> auth.js:151 ~ data.nama_user', data.nama_user);
                         this.updateGreeting(data.nama_user);
+                        this.showValidInvitationState(); // Ensure button is visible for valid users
                         console.log('User authenticated successfully:', data);
                     } else {
                         console.warn('Invalid response format or missing nama_user');
                         this.showErrorState();
+                        // Also show invalid invitation state if no valid data found
+                        this.showInvalidInvitationState();
                     }
                 } catch (error) {
-                    this.showErrorState();
                     console.error('Error during authentication:', error);
+                    // Check if error indicates invalid invitation
+                    if (error.message && (error.message.includes('404') || error.message.includes('401'))) {
+                        this.showInvalidInvitationState();
+                    } else {
+                        this.showErrorState();
+                    }
                 }
             } else {
-                // No username provided, show default greeting
+                // No username provided, show default greeting (not invalid invitation)
                 this.showErrorState();
             }
         },
