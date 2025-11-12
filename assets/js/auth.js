@@ -140,6 +140,187 @@ $(document).ready(function() {
         },
 
         /**
+         * Submit RSVP form to API
+         * @param {Object} formData - Form data object
+         * @returns {Promise<Object|null>} API response or null on error
+         */
+        async submitRSVP(formData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/komentar/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('RSVP submission failed:', error);
+                return null;
+            }
+        },
+
+        /**
+         * Map attendance value from form to API format
+         * @param {string} attendanceText - Text from attendance dropdown
+         * @returns {number} 1 for attending, 2 for not attending
+         */
+        mapAttendanceValue(attendanceText) {
+            if (attendanceText.toLowerCase().includes('datang')) {
+                return 1;
+            } else if (attendanceText.toLowerCase().includes('tidak')) {
+                return 2;
+            }
+            return 1; // Default to attending if unclear
+        },
+
+        /**
+         * Validate RSVP form
+         * @param {Object} formData - Form data to validate
+         * @returns {Object} Validation result with isValid and errors
+         */
+        validateRSVPForm(formData) {
+            const errors = [];
+
+            if (!formData.nama_komentator || formData.nama_komentator.trim() === '') {
+                errors.push('Nama wajib diisi');
+            }
+
+            if (!formData.isi_komentar || formData.isi_komentar.trim() === '') {
+                errors.push('Pesan wajib diisi');
+            }
+
+            if (!formData.kehadiran) {
+                errors.push('Status kehadiran wajib dipilih');
+            }
+
+            return {
+                isValid: errors.length === 0,
+                errors: errors
+            };
+        },
+
+        /**
+         * Show RSVP form success message
+         */
+        showRSVPSuccess() {
+            const successDiv = document.getElementById('success');
+            const errorDiv = document.getElementById('error');
+            const form = document.getElementById('rsvp-form');
+
+            if (successDiv) {
+                successDiv.style.display = 'block';
+                setTimeout(() => {
+                    successDiv.style.display = 'none';
+                }, 5000);
+            }
+
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+
+            if (form) {
+                // form.reset();
+                // reset form events & notes only
+                const notesInput = form.querySelector('textarea[name="notes"]');
+                const attendanceSelect = form.querySelector('select[name="events"]');
+                if (notesInput) notesInput.value = '';
+                if (attendanceSelect) attendanceSelect.selectedIndex = 0;
+            }
+        },
+
+        /**
+         * Show RSVP form error message
+         * @param {string} message - Error message to display
+         */
+        showRSVPError(message = 'Terjadi kesalahan saat mengirim data. Silakan coba lagi.') {
+            const successDiv = document.getElementById('success');
+            const errorDiv = document.getElementById('error');
+            const loader = document.getElementById('loader');
+
+            if (successDiv) {
+                successDiv.style.display = 'none';
+            }
+
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 5000);
+            }
+
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        },
+
+        /**
+         * Initialize RSVP form functionality
+         */
+        initializeRSVPForm() {
+            const form = document.getElementById('rsvp-form');
+
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    // Get form data
+                    const nameInput = form.querySelector('input[name="name"]');
+                    const notesInput = form.querySelector('textarea[name="notes"]');
+                    const attendanceSelect = form.querySelector('select[name="events"]');
+                    const loader = document.getElementById('loader');
+
+                    // Show loader
+                    if (loader) {
+                        loader.style.display = 'block';
+                    }
+
+                    // Prepare form data for API
+                    const formData = {
+                        nama_komentator: nameInput ? nameInput.value : '',
+                        isi_komentar: notesInput ? notesInput.value : '',
+                        kehadiran: attendanceSelect ? this.mapAttendanceValue(attendanceSelect.value) : 1
+                    };
+
+                    // Validate form
+                    const validation = this.validateRSVPForm(formData);
+
+                    if (!validation.isValid) {
+                        this.showRSVPError(validation.errors.join(', '));
+                        return;
+                    }
+
+                    try {
+                        // Submit to API
+                        const result = await this.submitRSVP(formData);
+
+                        if (result) {
+                            this.showRSVPSuccess();
+                            console.log('RSVP submitted successfully:', result);
+                        } else {
+                            this.showRSVPError('Gagal mengirim RSVP. Silakan coba lagi.');
+                        }
+                    } catch (error) {
+                        this.showRSVPError('Terjadi kesalahan jaringan. Silakan coba lagi.');
+                        console.error('RSVP submission error:', error);
+                    } finally {
+                        // Hide loader
+                        if (loader) {
+                            loader.style.display = 'none';
+                        }
+                    }
+                });
+            }
+        },
+
+        /**
          * Initialize authentication process
          */
         async initializeUserAuth() {
@@ -177,6 +358,7 @@ $(document).ready(function() {
          */
         init() {
             this.initializeUserAuth();
+            this.initializeRSVPForm();
         }
     };
 
