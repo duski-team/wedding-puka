@@ -707,6 +707,7 @@ $(document).ready(function() {
             }
         },
 
+        
         /**
          * Initialize RSVP form functionality
          */
