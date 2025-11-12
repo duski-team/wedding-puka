@@ -643,6 +643,10 @@ $(document).ready(function() {
                             console.log('RSVP submitted successfully:', result);
                             // Refresh comments list after successful submission
                             this.loadComments();
+
+                            // Scroll to element id "comments-section"
+                            const commentsSection = document.getElementById('comments-section');
+                            commentsSection.scrollIntoView({ behavior: 'smooth' });
                         } else {
                             this.showRSVPError('Gagal mengirim RSVP. Silakan coba lagi.');
                         }
@@ -704,4 +708,7 @@ $(document).ready(function() {
 
     // Initialize authentication when page loads
     WeddingAuth.init();
+
+    // Make WeddingAuth accessible globally for onclick handlers
+    window.WeddingAuth = WeddingAuth;
 });
