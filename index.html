@@ -124,7 +124,7 @@
 <body id="home">
 
     <!-- Wedding Cover Overlay -->
-    <!-- <div id="wedding-cover" class="wedding-cover">
+    <div id="wedding-cover" class="wedding-cover">
         <div class="cover-content">
             <div class="cover-animation">
                 <p class="cover-greeting" style="color: #ffffff; font-size: 18px; margin-bottom: 20px;">
@@ -145,7 +145,7 @@
                 </button>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Audio Element -->
     <audio id="weddingMusic" loop>
@@ -158,14 +158,14 @@
     <div class="page-wrapper">
 
         <!-- start preloader -->
-        <!-- <div class="preloader">
+        <div class="preloader">
             <div class="middle">
                 <i class="fi flaticon-favorite-heart-button"></i>
                 <i class="fi flaticon-favorite-heart-button"></i>
                 <i class="fi flaticon-favorite-heart-button"></i>
                 <i class="fi flaticon-favorite-heart-button"></i>
             </div>
-        </div> -->
+        </div>
         <!-- end preloader --> 
 
 
@@ -682,66 +682,9 @@
     <script src="assets/js/jquery.arctext.js"></script>
 
     <!-- Custom script for this template -->
-    <!-- <script src="assets/js/script.js"></script> -->
+    <script src="assets/js/script.js"></script>
 
-    <!-- Bootstrap Modal JavaScript -->
-    <script>
-        $(document).ready(function() {
-            // Add hover effect to gift option cards
-            $('.gift-option').hover(
-                function() {
-                    $(this).css({
-                        'transform': 'translateY(-2px)',
-                        'box-shadow': '0 5px 15px rgba(0, 0, 0, 0.1)'
-                    });
-                },
-                function() {
-                    $(this).css({
-                        'transform': 'translateY(0)',
-                        'box-shadow': 'none'
-                    });
-                }
-            );
-
-            // Add hover effect to gift button
-            $('[data-target="#giftModal"]').hover(
-                function() {
-                    $(this).css({
-                        'background': 'linear-gradient(135deg, #c4956a 0%, #b4855a 100%)',
-                        'transform': 'translateY(-2px)',
-                        'box-shadow': '0 6px 20px rgba(212, 165, 116, 0.4)'
-                    });
-                },
-                function() {
-                    $(this).css({
-                        'background': 'linear-gradient(135deg, #d4a574 0%, #c4956a 100%)',
-                        'transform': 'translateY(0)',
-                        'box-shadow': '0 4px 15px rgba(212, 165, 116, 0.3)'
-                    });
-                }
-            );
-
-            // Handle modal events
-            $('#giftModal').on('show.bs.modal', function () {
-                // Add any custom logic when modal is shown
-                console.log('Gift modal is about to be shown');
-            });
-
-            $('#giftModal').on('shown.bs.modal', function () {
-                // Add any custom logic after modal is shown
-                console.log('Gift modal is fully shown');
-            });
-
-            $('#giftModal').on('hide.bs.modal', function () {
-                // Add any custom logic when modal is hidden
-                console.log('Gift modal is about to be hidden');
-            });
-
-            $('#giftModal').on('hidden.bs.modal', function () {
-                // Add any custom logic after modal is hidden
-                console.log('Gift modal is fully hidden');
-            });
-        });
-    </script>
+    <!-- User Authentication and Personalization JavaScript -->
+    <script src="assets/js/auth.js"></script>
 </body>
 </html>
