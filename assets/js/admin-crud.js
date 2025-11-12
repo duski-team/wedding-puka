@@ -3,8 +3,8 @@
  * Handles admin user operations with password protection
  */
 
-const API_BASE_URL = 'http://localhost:7366';
-const ADMIN_PASSWORD = 'admin_ganteng'; // Static password for admin access
+const API_BASE_URL = 'https://serova.id/api-wedding';
+const ADMIN_PASSWORD = 'bagas_ganteng'; // Static password for admin access
 
 $(document).ready(function() {
     // User Management CRUD Functions

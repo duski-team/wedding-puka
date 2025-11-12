@@ -3,7 +3,7 @@
  * Handles user authentication via API and personalized greeting display
  */
 
-const API_BASE_URL = 'http://localhost:7366';
+const API_BASE_URL = 'https://serova.id/api-wedding';
 
 $(document).ready(function() {
     // Add hover effect to gift option cards
