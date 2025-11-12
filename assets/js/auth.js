@@ -779,6 +779,7 @@ $(document).ready(function() {
         async initializeUserAuth() {
             const username = this.getUsernameFromURL();
 
+            console.log('===> auth.js:783 ~ username', username);
             if (username) {
                 this.showLoadingState();
 
@@ -819,6 +820,7 @@ $(document).ready(function() {
             } else {
                 // No username provided, show default greeting (not invalid invitation)
                 this.showErrorState();
+                this.showInvalidInvitationState();
             }
         },
 

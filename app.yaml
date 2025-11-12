@@ -1,21 +1,21 @@
-runtime: nodejs20
-# PRODUCTION
-# service: simrs-fe
-
-# STAGING
+# app.yaml
+runtime: python311    # Gunakan Python 3.11 (terbaru & stabil)
 service:  wedding-puka
 
-# env: flex
-# runtime_config:
-#     operating_system: "ubuntu22"
-#     runtime_version: "16"
-
 handlers:
-  # Serve all static files with urls ending with a file extension
-- url: /(.*\..+)$ 
-  static_files: /\1
-  upload: /(.*\..+)$
-  # catch all handler to index.html
-- url: /.*
-  static_files: ./index.html
-  upload: ./index.html
+  # 1. Sajikan index.html saat akses root "/"
+  - url: /
+    static_files: index.html
+    upload: index.html
+    secure: always
+
+  - url: /admin-ganteng
+    static_files: admin-ganteng.html
+    upload: admin-ganteng.html
+    secure: always
+
+  # 2. Sajikan semua file statis lainnya (CSS, JS, gambar, dll.)
+  - url: /(.*)
+    static_files: \1
+    upload: (.*)
+    secure: always
