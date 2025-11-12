@@ -1598,6 +1598,72 @@ img {
   }
 }
 
+/* Hero Mouse Icon Styles */
+.hero-mouse-icon {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  text-align: center;
+  animation: bounce 2s infinite;
+}
+
+.mouse-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.mouse-icon {
+  width: 24px;
+  height: 38px;
+  margin-bottom: 10px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.mouse-icon:hover {
+  opacity: 1;
+}
+
+.mouse-text {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-mouse-icon {
+    bottom: 20px;
+  }
+
+  .mouse-icon {
+    width: 20px;
+    height: 32px;
+  }
+
+  .mouse-text {
+    font-size: 10px;
+  }
+}
+
 /*--------------------------------------------------------------
 #0.5	footer-section
 --------------------------------------------------------------*/
