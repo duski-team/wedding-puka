@@ -292,6 +292,8 @@ $(document).ready(function() {
                 return 1;
             } else if (attendanceText.toLowerCase().includes('tidak')) {
                 return 2;
+            } else if (attendanceText.toLowerCase().includes('belum tahu')) {
+                return 0; // Default to attending if unsure
             }
             return 1; // Default to attending if unclear
         },
@@ -312,7 +314,7 @@ $(document).ready(function() {
                 errors.push('Pesan wajib diisi');
             }
 
-            if (!formData.kehadiran) {
+            if (!formData.kehadiran && formData.kehadiran !== 0) {
                 errors.push('Status kehadiran wajib dipilih');
             }
 
@@ -435,6 +437,9 @@ $(document).ready(function() {
          * @returns {string} Display text for attendance status
          */
         mapAttendanceToText(kehadiran) {
+            if (kehadiran === 0) {
+                return 'Belum Tahu';
+            }
             return kehadiran === 1 ? 'Akan Datang' : 'Tidak Dapat Datang';
         },
 
@@ -608,9 +613,7 @@ $(document).ready(function() {
                             </h5>
                         </div>
                         <div style="text-align: right;">
-                            <span class="badge" style="background: ${comment.kehadiran === 1 ? '#28a745' : '#dc3545'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
-                                ${this.mapAttendanceToText(comment.kehadiran)}
-                            </span>
+                            
                         </div>
                     </div>
                     <div class="comment-body">
