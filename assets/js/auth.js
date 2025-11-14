@@ -73,7 +73,7 @@ $(document).ready(function() {
          */
         getUsernameFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('username');
+            return urlParams.get('id');
         },
 
         /**
@@ -83,14 +83,13 @@ $(document).ready(function() {
          */
         async authenticateUser(username) {
             try {
-                const response = await fetch(`${API_BASE_URL}/user/login`, {
+                const response = await fetch(`${API_BASE_URL}/user/list`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        username: username,
-                        password: 'fosan_123'
+                        id: username,
                     })
                 });
 
@@ -607,9 +606,6 @@ $(document).ready(function() {
                             <h5 style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">
                                 ${this.getAttendanceIcon(comment.kehadiran)} ${comment.nama_komentator}
                             </h5>
-                            <small style="color: #666; font-size: 12px;">
-                                ${this.formatDate(comment.created_at)}
-                            </small>
                         </div>
                         <div style="text-align: right;">
                             <span class="badge" style="background: ${comment.kehadiran === 1 ? '#28a745' : '#dc3545'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
