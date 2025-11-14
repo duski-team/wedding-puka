@@ -204,7 +204,7 @@ $(document).ready(function() {
                     username: userData.username,
                     password: this.getStaticPassword(),
                     role: this.getStaticRole(),
-                    nama_user: userData.nama_user || userData.username
+                    nama_user: userData?.nama_user || userData.username
                 };
 
                 const response = await fetch(`${API_BASE_URL}/user/register`, {
@@ -491,10 +491,6 @@ $(document).ready(function() {
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label for="username" style="display: block; margin-bottom: 5px; color: #333; font-weight: 600;">Username</label>
                                 <input type="text" id="username" name="username" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="nama_user" style="display: block; margin-bottom: 5px; color: #333; font-weight: 600;">Nama Lengkap</label>
-                                <input type="text" id="nama_user" name="nama_user" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
                             </div>
                             <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
                                 <button type="button" id="cancel-form" class="btn btn-secondary" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
