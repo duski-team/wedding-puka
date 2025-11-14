@@ -347,27 +347,6 @@ $(document).ready(function() {
                 errors.push('Username wajib diisi');
             }
 
-            if (userData.username && userData.username.length < 3) {
-                errors.push('Username minimal 3 karakter');
-            }
-
-            if (userData.username && !/^[a-zA-Z0-9_]+$/.test(userData.username)) {
-                errors.push('Username hanya boleh mengandung huruf, angka, dan underscore');
-            }
-
-            if (!userData.nama_user || userData.nama_user.trim() === '') {
-                errors.push('Nama lengkap wajib diisi');
-            }
-
-            if (userData.nama_user && userData.nama_user.length < 2) {
-                errors.push('Nama lengkap minimal 2 karakter');
-            }
-
-            // For update operation, allow existing username
-            if (operation === 'register' && userData.username) {
-                // Additional validation for new registrations can be added here
-            }
-
             return {
                 isValid: errors.length === 0,
                 errors: errors
@@ -574,8 +553,8 @@ $(document).ready(function() {
             // Populate form for update operation
             if (operation === 'update' && userData) {
                 document.getElementById('username').value = userData.username || '';
-                document.getElementById('nama_user').value = userData.nama_user || '';
-                document.getElementById('username').setAttribute('readonly', 'readonly');
+                // document.getElementById('nama_user').value = userData.nama_user || '';
+                // document.getElementById('username').setAttribute('readonly', 'readonly');
                 document.getElementById('submit-form').textContent = 'Update';
             } else {
                 form.reset();
@@ -612,7 +591,7 @@ $(document).ready(function() {
 
             const formData = {
                 username: document.getElementById('username').value.trim(),
-                nama_user: document.getElementById('nama_user').value.trim()
+                // nama_user: document.getElementById('nama_user').value.trim()
             };
 
             let result;
@@ -622,7 +601,7 @@ $(document).ready(function() {
                 // For update, use the original username
                 result = await this.updateUser({
                     ...formData,
-                    username: originalUsername
+                    // username: originalUsername
                 });
             }
 
@@ -694,13 +673,19 @@ $(document).ready(function() {
                 return;
             }
 
+            // get current domain 
+            const currentDomain = window.location.origin;
+
             const usersHTML = users.map((user, index) => `
                 <div class="user-card" style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #d4a574;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <div>
-                            <h4 style="margin: 0; color: #333; font-size: 16px;">${user.nama_user || user.username}</h4>
+                            <h4 style="margin: 0; color: #333; font-size: 16px;">ID: ${user.id}</h4>
                             <p style="margin: 0; color: #666; font-size: 14px;">@${user.username}</p>
                             <small style="color: #999;">Role: ${user.role || 'user'}</small>
+                            <a href="${currentDomain}?id=${user.id}" target="_blank" style="display: block; margin-top: 5px; font-size: 12px; color: #007bff; text-decoration: none;">
+                                ${currentDomain}?id=${user.id}
+                            </a>
                         </div>
                         <div class="user-actions" style="display: flex; gap: 10px;">
                             <button onclick="UserCRUD.editUser('${user.username}')" class="btn btn-sm" style="padding: 6px 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
