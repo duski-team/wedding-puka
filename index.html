@@ -128,7 +128,7 @@
         <div class="cover-content">
             <div class="cover-animation">
                 <p class="cover-greeting" style="color: #ffffff; font-size: 18px; margin-bottom: 20px;">
-                    Kepada Yth. Bapak/Ibu/Saudara/i<br>{nama}
+                    Kepada Yth. Bapak/Ibu/Saudara/i<br><span class="highlight-name">{nama}</span>
                 </p>
                 <h1 class="cover-title">Pernikahan</h1>
                 <h2 class="cover-couple-names">Satrio &amp; Umi</h2>
@@ -216,7 +216,7 @@
                         <ul class="nav navbar-nav">
                             <li><a href="#home">Home</a></li>
                             <li><a href="#couple">Couple</a></li>
-                            <li><a href="#story">Story</a></li>
+                            <li style="display: none;"><a href="#story">Story</a></li>
                             <li><a href="#events">Events</a></li>
                             <li><a href="#rsvp">RSVP</a></li>
                         </ul>
@@ -310,13 +310,13 @@
                 </div>
                 </div>
             </div>
-            </section>
+        </section>
 
         <!-- end couple-section -->
 
 
         <!-- start love-sotry-section -->
-        <section class="love-sotry-section section-padding" id="story">
+        <section style="display: none;" class="love-sotry-section section-padding" id="story">
             <div class="container">
                 <div class="row">
                 <div class="col col-xs-12">
@@ -641,9 +641,15 @@
 
                             <div class="gift-option" style="text-align: center; padding: 20px; border-radius: 10px; background-color: #fafafa; margin-bottom: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                                 <h4 style="color: #d4a574; font-size: 20px; margin-bottom: 15px; font-weight: 600;">🏦 Rekening Bank</h4>
-                                <div class="bank-info" style="background: #fff; padding: 20px; border-radius: 10px; text-align: left; border: 1px solid #eee;">
+                                <div class="bank-info" style="background: #fff; padding: 20px; border-radius: 10px; text-align: left; border: 1px solid #eee; margin-bottom: 1rem;">
                                     <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Bank:</strong> BCA</p>
                                     <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Nomor Rekening:</strong> 8030672101</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Atas Nama:</strong> Umi Toifah</p>
+                                </div>
+
+                                <div class="bank-info" style="background: #fff; padding: 20px; border-radius: 10px; text-align: left; border: 1px solid #eee;">
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Bank:</strong> BNI</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Nomor Rekening:</strong> 0346575181</p>
                                     <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Atas Nama:</strong> Umi Toifah</p>
                                 </div>
                             </div>
@@ -652,19 +658,12 @@
                                 <h4 style="color: #d4a574; font-size: 20px; margin-bottom: 15px; font-weight: 600;">🎁 Alamat Pengiriman Kado</h4>
                                 <div class="address-info" style="background: #fff; padding: 20px; border-radius: 10px; text-align: left; border: 1px solid #eee;">
                                     <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Penerima:</strong> Umi Toifah</p>
-                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Alamat:</strong> Jalan Slamet Riyadi No. 248 RT 12 RW 06</p>
-                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kelurahan:</strong> Pucung Kidul, Kec. Kroya</p>
-                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kabupaten:</strong> Cilacap, Jawa Tengah</p>
-                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kode Pos:</strong> 53283</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Alamat:</strong> Jalan Tejosari Selatan Dalam RT 01 RW 05, No. 38</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kelurahan:</strong> Kelurahan Gedawang</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kecamatan:</strong> Kecamatan Banyumanik, (Rumah Pojok, Kiri Jalan)</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kabupaten:</strong> Kota Semarang</p>
+                                    <p style="margin: 8px 0; font-size: 14px; color: #555;"><strong style="color: #333; display: inline-block; min-width: 120px;">Kode Pos:</strong> 50266</p>
                                 </div>
-                            </div>
-
-                            <div class="gift-option" style="text-align: center; padding: 20px; border-radius: 10px; background-color: #fafafa; margin-bottom: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                                <h4 style="color: #d4a574; font-size: 20px; margin-bottom: 15px; font-weight: 600;">💳 QRIS</h4>
-                                <img src="assets/images/qris.jpeg" alt="QRIS" style="max-width: 250px; border-radius: 10px; margin: 15px 0;">
-                                <p style="font-size: 14px; color: #555; margin-bottom: 0;">
-                                    Scan kode QR di atas untuk memberikan hadiah secara langsung.
-                                </p>
                             </div>
 
                         </div>

@@ -4067,3 +4067,8 @@ img {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.highlight-name {
+  font-weight: 700;
+  font-size: 35px;
+}

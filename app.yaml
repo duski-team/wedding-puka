@@ -1,6 +1,6 @@
 # app.yaml
 runtime: python311    # Gunakan Python 3.11 (terbaru & stabil)
-service:  wedding-puka
+service:  wedding-satrio-umi
 
 handlers:
   # 1. Sajikan index.html saat akses root "/"

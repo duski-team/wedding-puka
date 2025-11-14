@@ -131,7 +131,7 @@ $(document).ready(function() {
         updateGreeting(fullName) {
             const greetingElement = document.querySelector('.cover-greeting');
             if (greetingElement) {
-                greetingElement.innerHTML = `Kepada Yth. Bapak/Ibu/Saudara/i<br>${fullName}`;
+                greetingElement.innerHTML = `Kepada Yth. Bapak/Ibu/Saudara/i<br><span class="highlight-name">${fullName}</span>`;
             }
 
             // find input name="name"
