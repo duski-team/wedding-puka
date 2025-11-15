@@ -762,8 +762,11 @@
 
     // Keyboard shortcuts
     $(document).on('keydown', function(e) {
-        // Space key to toggle music (only when cover is closed)
-        if (e.keyCode === 32 && !$('#wedding-cover').is(':visible')) {
+        // Check if user is typing in an input field
+        var isTyping = $(e.target).is('input[type="text"], input[type="email"], textarea, input[name="name"], input[name="email"]');
+
+        // Space key to toggle music (only when cover is closed and not typing)
+        if (e.keyCode === 32 && !$('#wedding-cover').is(':visible') && !isTyping) {
             e.preventDefault();
             $('#musicToggle').click();
         }
